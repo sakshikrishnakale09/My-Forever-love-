@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>I Love You Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom right, #fbc2eb, #a6c1ee);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background: #ffffffcc;
+      color: #333;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    #fireworks {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif') center center no-repeat;
+      background-size: cover;
+    }
+
+    #heartContainer {
+      display: none;
+      position: relative;
+      width: 500px;
+      height: 450px;
+    }
+
+    .heart-img {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      object-fit: cover;
+      box-shadow: 0 0 10px #fff;
+    }
+
+    #loveMessage {
+      display: none;
+      font-size: 2rem;
+      margin-top: 30px;
+      color: #fff;
+      font-family: 'Brush Script MT', cursive;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="sorryBtn">Tap on Sorry</button>
+  <button id="readyBtn" style="display:none;">Are You Ready?</button>
+
+  <div id="fireworks"></div>
+  <div id="heartContainer"></div>
+  <div id="loveMessage"></div>
+
+  <audio id="crackleSound" src="https://freesound.org/data/previews/353/353009_4019027-lq.mp3"></audio>
+  <audio id="music" src="https://files.catbox.moe/pjmxo8.mp3"></audio>
+
+  <script>
+    const sorryBtn = document.getElementById("sorryBtn");
+    const readyBtn = document.getElementById("readyBtn");
+    const fireworks = document.getElementById("fireworks");
+    const heartContainer = document.getElementById("heartContainer");
+    const loveMessage = document.getElementById("loveMessage");
+    const crackleSound = document.getElementById("crackleSound");
+    const music = document.getElementById("music");
+
+    const imageLinks = [
+      "https://i.ibb.co/ZvsszqY/74022-DD7-8-A77-499-B-AD48-B434418-A07-DF.png",
+      "https://i.ibb.co/mr8Ts3b/IMG-3713.jpg",
+      "https://i.ibb.co/212dc58/IMG-3682.jpg",
+      "https://i.ibb.co/JFnRgvh/IMG-2265.jpg",
+      "https://i.ibb.co/6Rxyqms/IMG-2259.jpg",
+      "https://i.ibb.co/N286QdR/IMG-1840.jpg",
+      "https://i.ibb.co/6JqB9yN/IMG-1167.jpg",
+      "https://i.ibb.co/sp4DqPV/061a4f7e-769b-4a75-9093-cf1f3b7dfc33.jpg",
+      "https://i.ibb.co/fYdXsGm/3d7ad99c-f7b5-4f91-ab90-059b6d784041.jpg",
+      "https://i.ibb.co/WNkmFts/IMG-8588.jpg",
+      "https://i.ibb.co/PG42RPL/IMG-8587.jpg",
+      "https://i.ibb.co/Ng6mBp3/3-FAA830-C-C295-4319-BEAA-A0-FEB5-BF62-AC.jpg",
+      "https://i.ibb.co/JWgtvPL/939b3a43-cfeb-4486-a9b0-dc0daca955eb.jpg",
+      "https://i.ibb.co/qYyk5Cg/IMG-4088.jpg",
+      "https://i.ibb.co/Kpm8Lf4/IMG-4085.jpg",
+      "https://i.ibb.co/nNRG3vC/IMG-2256.jpg",
+      "https://i.ibb.co/chs0Bxf/IMG-2263.jpg",
+      "https://i.ibb.co/dYgJZqF/IMG-1109.jpg",
+      "https://i.ibb.co/xq4WJQv/3293e8ec-0ace-4f9b-a5b8-198f2957542e.jpg",
+      "https://i.ibb.co/BKjPRcd/95648506-2903-4483-8b76-ee72e99a6cf3.jpg"
+    ];
+
+    const heartCoords = [
+      [220, 50], [170, 80], [270, 80],
+      [130, 130], [310, 130], [100, 180], [340, 180],
+      [90, 240], [350, 240],
+      [110, 310], [330, 310],
+      [150, 360], [190, 390], [230, 390], [270, 360],
+      [180, 300], [260, 300],
+      [200, 330], [240, 330],
+      [220, 350]
+    ];
+
+    sorryBtn.onclick = () => {
+      sorryBtn.style.display = "none";
+      readyBtn.style.display = "inline-block";
+    };
+
+    readyBtn.onclick = () => {
+      readyBtn.style.display = "none";
+      fireworks.style.display = "block";
+      crackleSound.play();
+
+      setTimeout(() => {
+        fireworks.style.display = "none";
+        crackleSound.pause();
+        music.play();
+        showHeart();
+        showMessage("I Love You Sweetheart Forever");
+      }, 4500);
+    };
+
+    function showHeart() {
+      heartContainer.style.display = "block";
+      imageLinks.forEach((link, i) => {
+        const img = document.createElement("img");
+        img.src = link;
+        img.className = "heart-img";
+        const [x, y] = heartCoords[i];
+        img.style.left = `${x}px`;
+        img.style.top = `${y}px`;
+        heartContainer.appendChild(img);
+        setTimeout(() => {
+          img.style.opacity = 1;
+        }, i * 200);
+      });
+    }
+
+    function showMessage(text) {
+      loveMessage.style.display = "block";
+      let i = 0;
+      let interval = setInterval(() => {
+        loveMessage.innerHTML += text[i];
+        i++;
+        if (i >= text.length) clearInterval(interval);
+      }, 150);
+    }
+  </script>
+</body>
+</html>
